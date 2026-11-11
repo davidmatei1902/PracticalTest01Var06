@@ -1,11 +1,13 @@
 package ro.pub.cs.systems.eim.practicaltest01var06
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -25,6 +27,8 @@ class PracticalTest01Var06MainActivity : AppCompatActivity() {
 
     private lateinit var playButton: Button
     private lateinit var randomButton: Button
+
+    private var cumulatedScore: Int = 0
 
 
 
@@ -107,7 +111,44 @@ class PracticalTest01Var06MainActivity : AppCompatActivity() {
 
             intent.putExtra("gain", gain)
 
-            startActivity(intent)
+            startActivityForResult(intent, 1)
         }
+
+        if(savedInstanceState != null) {
+            numere1.setText(savedInstanceState.getString("scor1").toString())
+            numere2.setText(savedInstanceState.getString("scor2").toString())
+            numere3.setText(savedInstanceState.getString("scor3").toString())
+
+            cumulatedScore = savedInstanceState.getInt("gain")
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        when (requestCode) {
+            1 -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val gain  = intent?.getIntExtra("scor", 0) ?: 0
+
+                    cumulatedScore += gain
+
+                    val text = "Gain: $cumulatedScore"
+                    val duration = Toast.LENGTH_SHORT
+
+                    val toast = Toast.makeText(this, text, duration) // in Activity
+                    toast.show()
+                }
+            }
+            // process other request codes
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putString("scor1", numere1.text.toString())
+        outState.putString("scor2", numere2.text.toString())
+        outState.putString("scor3", numere3.text.toString())
+        outState.putInt("gain", cumulatedScore)
     }
 }
