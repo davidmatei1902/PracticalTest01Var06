@@ -76,6 +76,36 @@ class PracticalTest01Var06MainActivity : AppCompatActivity() {
             intent.putExtra("numar2", numere2.text)
             intent.putExtra("numar3", numere3.text)
 
+            var counter: Int = 0
+            if(checkBox1.isChecked) {
+                counter++
+            }
+            if(checkBox2.isChecked) {
+                counter++
+            }
+            if(checkBox3.isChecked) {
+                counter++
+            }
+
+            if(numere1.text.equals(numere2.text) && numere2.text.equals(numere3.text) && !numere1.equals("*") && !numere2.equals("*") && !numere3.equals("*"))
+            {
+                intent.putExtra("sameVal", true);
+            }
+            else
+            {
+                intent.putExtra("sameVal", false);
+            }
+
+            var gain : Int = 0
+            when (counter) {
+                0 -> gain = 100
+                1 -> gain = 50
+                2 -> gain = 10
+                3 -> gain = 0
+            }
+            // todo
+
+            intent.putExtra("gain", gain)
 
             startActivity(intent)
         }
